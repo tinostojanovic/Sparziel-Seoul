@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Auslandssemester Seoul — Sparziel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF3EC; --cream-deep:#F0E4D8; --white:#FFFFFF;
+    --rose:#D98CA3; --rose-deep:#B85C7D; --rose-pale:#F5DBE3;
+    --ink:#3D2C33; --ink-soft:#8A7078;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:520px; margin:0 auto; padding:2.4rem 1.4rem 4rem;}
+  h1{
+    font-family:'Fraunces',serif; font-weight:650; font-size:2.1rem;
+    margin:0 0 .2rem; letter-spacing:-.01em; line-height:1.05;
+  }
+  .dates{margin:0 0 2rem; color:var(--ink-soft); font-size:.95rem;}
+
+  .ring-card{
+    background:var(--white); border-radius:28px; padding:2.2rem 1.6rem 1.8rem;
+    display:flex; flex-direction:column; align-items:center;
+    box-shadow:0 1px 2px rgba(61,44,51,.06);
+  }
+  .ring-wrap{position:relative; width:220px; height:220px;}
+  svg{transform:rotate(-90deg);}
+  .ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+  }
+  .amount{font-family:'Fraunces',serif; font-weight:650; font-size:1.9rem;}
+  .goal-label{font-size:.8rem; color:var(--ink-soft); margin-top:.15rem;}
+  .stats{display:flex; gap:2.6rem; margin-top:1.6rem;}
+  .stats div{text-align:center;}
+  .stats span{display:block; font-family:'Fraunces',serif; font-weight:560; font-size:1.2rem;}
+  .stats small{color:var(--ink-soft); font-size:.75rem;}
+
+  details.settings{
+    margin-top:1rem; background:var(--white); border-radius:18px; padding:.9rem 1.2rem; overflow:hidden;
+  }
+  details.settings summary{cursor:pointer; font-weight:500; font-size:.9rem; color:var(--rose-deep);}
+  .settings-body{display:flex; gap:.7rem; flex-wrap:wrap; margin-top:.9rem;}
+  .settings-body label{font-size:.75rem; color:var(--ink-soft); flex:1; min-width:110px;}
+  .settings-body input{
+    display:block; width:100%; margin-top:.3rem; padding:.5rem .6rem; border-radius:10px;
+    border:1px solid var(--cream-deep); background:var(--cream); font-family:inherit; font-size:.85rem; color:var(--ink);
+  }
+
+  section.add-form{margin-top:1.6rem;}
+  section.add-form h2, section.months h2{
+    font-family:'Fraunces',serif; font-weight:560; font-size:1.15rem; margin:0 0 .8rem;
+  }
+  .form-row{
+    background:var(--white); border-radius:18px; padding:1rem; display:flex; flex-direction:column; gap:.6rem;
+  }
+  .form-row input{
+    padding:.65rem .8rem; border-radius:12px; border:1px solid var(--cream-deep);
+    background:var(--cream); font-family:inherit; font-size:.9rem; color:var(--ink);
+  }
+  .form-row input:focus, .settings-body input:focus{outline:2px solid var(--rose); outline-offset:1px;}
+  button#addBtn{
+    padding:.7rem; border:none; border-radius:12px; background:var(--rose-deep); color:var(--white);
+    font-family:inherit; font-weight:600; font-size:.9rem; cursor:pointer; transition:background .15s;
+  }
+  button#addBtn:hover{background:var(--rose);}
+
+  section.months{margin-top:1.8rem;}
+  .month{
+    background:var(--white); border-radius:16px; margin-bottom:.6rem; overflow:hidden;
+  }
+  .month summary{
+    list-style:none; cursor:pointer; padding:.9rem 1.1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  }
+  .month summary::-webkit-details-marker{display:none;}
+  .month-name{font-weight:500; font-size:.92rem;}
+  .month-sum{color:var(--ink-soft); font-size:.78rem;}
+  .bar{width:64px; height:7px; border-radius:4px; background:var(--rose-pale); overflow:hidden; flex-shrink:0;}
+  .bar-fill{height:100%; background:var(--rose-deep); border-radius:4px;}
+  .tx-list{padding:0 1.1rem 1rem; display:flex; flex-direction:column; gap:.5rem;}
+  .tx{
+    display:flex; justify-content:space-between; align-items:center; gap:.6rem;
+    font-size:.85rem; padding:.5rem .7rem; background:var(--cream); border-radius:10px;
+  }
+  .tx-info{display:flex; flex-direction:column;}
+  .tx-info .src{color:var(--ink-soft); font-size:.75rem;}
+  .tx-amt{font-weight:600; color:var(--rose-deep); white-space:nowrap;}
+  .tx-del{background:none; border:none; color:var(--ink-soft); font-size:1rem; cursor:pointer; padding:0 .2rem;}
+  .tx-empty{color:var(--ink-soft); font-size:.82rem; padding:.2rem .1rem .4rem;}
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#241C1F; --cream-deep:#2E2427; --white:#2C2226;
+      --rose:#E39BB0; --rose-deep:#E39BB0; --rose-pale:#3C2C31;
+      --ink:#F2E7EA; --ink-soft:#B8A2A8;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Auslandssemester Seoul</h1>
+    <p class="dates" id="rangeText">1. Sept. 2026 – 1. März 2027</p>
+  </header>
+
+  <div class="ring-card">
+    <div class="ring-wrap">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="96" stroke="var(--rose-pale)" stroke-width="16" fill="none"/>
+        <circle id="ringFill" cx="110" cy="110" r="96" stroke="var(--rose-deep)" stroke-width="16" fill="none"
+          stroke-linecap="round" stroke-dasharray="603.19" stroke-dashoffset="603.19"
+          style="transition:stroke-dashoffset .6s ease;"/>
+      </svg>
+      <div class="ring-center">
+        <span class="amount" id="savedAmount">0 €</span>
+        <span class="goal-label">von <span id="goalDisplay">10.000 €</span></span>
+      </div>
+    </div>
+    <div class="stats">
+      <div><span id="pctDisplay">0 %</span><small>erreicht</small></div>
+      <div><span id="remainingDisplay">10.000 €</span><small>fehlen noch</small></div>
+    </div>
+  </div>
+
+  <details class="settings">
+    <summary>Sparziel anpassen</summary>
+    <div class="settings-body">
+      <label>Sparziel (€)<input type="number" id="goalInput" min="0" step="50"></label>
+      <label>Start<input type="month" id="startInput"></label>
+      <label>Ziel-Monat<input type="month" id="endInput"></label>
+    </div>
+  </details>
+
+  <section class="add-form">
+    <h2>Geld hinzufügen</h2>
+    <div class="form-row">
+      <input type="number" id="amountInput" placeholder="Betrag in €" min="0" step="1">
+      <input type="text" id="sourceInput" placeholder="Woher kommt's? (z. B. Nebenjob, BAföG)">
+      <input type="date" id="dateInput">
+      <button id="addBtn">Hinzufügen</button>
+    </div>
+  </section>
+
+  <section class="months">
+    <h2>Monatsübersicht</h2>
+    <div id="monthList"></div>
+  </section>
+</div>
+
+<script>
+const KEY = 'seoul-sparziel-v1';
+const monthNames = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const eur = n => n.toLocaleString('de-DE',{maximumFractionDigits:0}) + ' €';
+
+let state;
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { goal:10000, start:'2026-09', end:'2027-02', transactions:[] };
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+state = load();
+
+function monthsBetween(start,end){
+  const [sy,sm]=start.split('-').map(Number), [ey,em]=end.split('-').map(Number);
+  const list=[]; let y=sy,m=sm;
+  while(y<ey || (y===ey && m<=em)){
+    list.push(`${y}-${String(m).padStart(2,'0')}`);
+    m++; if(m>12){m=1;y++;}
+  }
+  return list;
+}
+function monthLabel(ym){
+  const [y,m]=ym.split('-').map(Number);
+  return `${monthNames[m-1]} ${y}`;
+}
+function formatDateRange(){
+  const [sy,sm]=state.start.split('-').map(Number);
+  const [ey,em]=state.end.split('-').map(Number);
+  document.getElementById('rangeText').textContent =
+    `1. ${monthNames[sm-1]} ${sy} – 1. ${monthNames[em-1]==='Dezember'?'Januar':monthNames[(em%12)]} ${em===12?ey+1:ey}`;
+}
+
+function render(){
+  const total = state.transactions.reduce((s,t)=>s+t.amount,0);
+  const pct = state.goal>0 ? Math.min(total/state.goal,1) : 0;
+  const circumference = 2*Math.PI*96;
+  document.getElementById('ringFill').style.strokeDasharray = circumference;
+  document.getElementById('ringFill').style.strokeDashoffset = circumference*(1-pct);
+  document.getElementById('savedAmount').textContent = eur(total);
+  document.getElementById('goalDisplay').textContent = eur(state.goal);
+  document.getElementById('pctDisplay').textContent = Math.round(pct*100)+' %';
+  document.getElementById('remainingDisplay').textContent = eur(Math.max(state.goal-total,0));
+
+  document.getElementById('goalInput').value = state.goal;
+  document.getElementById('startInput').value = state.start;
+  document.getElementById('endInput').value = state.end;
+  formatDateRange();
+
+  let months = monthsBetween(state.start, state.end);
+  const txMonths = [...new Set(state.transactions.map(t=>t.date.slice(0,7)))];
+  txMonths.forEach(m=>{ if(!months.includes(m)) months.push(m); });
+  months.sort();
+  const fairShare = months.length>0 ? state.goal/months.length : 0;
+
+  const listEl = document.getElementById('monthList');
+  listEl.innerHTML = '';
+  months.slice().reverse().forEach(ym=>{
+    const txs = state.transactions.filter(t=>t.date.slice(0,7)===ym).sort((a,b)=>b.date.localeCompare(a.date));
+    const sum = txs.reduce((s,t)=>s+t.amount,0);
+    const mpct = fairShare>0 ? Math.min(sum/fairShare,1)*100 : 0;
+
+    const det = document.createElement('details');
+    det.className = 'month';
+    det.innerHTML = `
+      <summary>
+        <div>
+          <div class="month-name">${monthLabel(ym)}</div>
+          <div class="month-sum">${eur(sum)} von ${eur(Math.round(fairShare))}</div>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width:${mpct}%"></div></div>
+      </summary>
+      <div class="tx-list">
+        ${txs.length===0 ? '<div class="tx-empty">Noch keine Einträge in diesem Monat.</div>' : txs.map(t=>`
+          <div class="tx">
+            <div class="tx-info">
+              <span>${t.source||'Ohne Beschreibung'}</span>
+              <span class="src">${new Date(t.date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.4rem;">
+              <span class="tx-amt">+${eur(t.amount)}</span>
+              <button class="tx-del" data-id="${t.id}" title="Löschen">✕</button>
+            </div>
+          </div>`).join('')}
+      </div>`;
+    listEl.appendChild(det);
+  });
+
+  listEl.querySelectorAll('.tx-del').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault();
+      const id = btn.getAttribute('data-id');
+      state.transactions = state.transactions.filter(t=>String(t.id)!==id);
+      save(); render();
+    });
+  });
+}
+
+document.getElementById('dateInput').valueAsDate = new Date();
+
+document.getElementById('addBtn').addEventListener('click', ()=>{
+  const amount = parseFloat(document.getElementById('amountInput').value);
+  const source = document.getElementById('sourceInput').value.trim();
+  const date = document.getElementById('dateInput').value || new Date().toISOString().slice(0,10);
+  if(!amount || amount<=0) return;
+  state.transactions.push({ id:Date.now(), amount, source, date });
+  save();
+  document.getElementById('amountInput').value = '';
+  document.getElementById('sourceInput').value = '';
+  render();
+});
+
+['goalInput','startInput','endInput'].forEach(id=>{
+  document.getElementById(id).addEventListener('change', ()=>{
+    const g = parseFloat(document.getElementById('goalInput').value);
+    if(g>0) state.goal = g;
+    state.start = document.getElementById('startInput').value || state.start;
+    state.end = document.getElementById('endInput').value || state.end;
+    save(); render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
